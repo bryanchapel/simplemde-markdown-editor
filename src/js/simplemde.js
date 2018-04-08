@@ -1,5 +1,5 @@
 /*global require,module*/
-"use strict";
+// "use strict";
 var CodeMirror = require("codemirror");
 require("codemirror/addon/edit/continuelist.js");
 require("./codemirror/tablist");
@@ -669,7 +669,7 @@ function drawHorizontalRule(editor) {
  * Undo action.
  */
 function undo(editor) {
-	let cm = editor.codemirror;
+	var cm = editor.codemirror;
 	cm.undo();
 	cm.focus();
 }
@@ -679,7 +679,7 @@ function undo(editor) {
  * Redo action.
  */
 function redo(editor) {
-	let cm = editor.codemirror;
+	var cm = editor.codemirror;
 	cm.redo();
 	cm.focus();
 }
@@ -689,11 +689,11 @@ function redo(editor) {
  * Toggle side by side preview
  */
 function toggleSideBySide(editor) {
-	let cm = editor.codemirror,
-	    wrapper = cm.getWrapperElement(),
-	    preview = wrapper.nextSibling,
-	    toolbarButton = editor.toolbarElements["side-by-side"],
-	    useSideBySideListener = false;
+	var cm = editor.codemirror,
+		wrapper = cm.getWrapperElement(),
+		preview = wrapper.nextSibling,
+		toolbarButton = editor.toolbarElements["side-by-side"],
+		useSideBySideListener = false;
 	if(/editor-preview-active-side/.test(preview.className)) {
 		preview.className = preview.className.replace(
 			/\s*editor-preview-active-side\s*/g, ""
@@ -715,18 +715,18 @@ function toggleSideBySide(editor) {
 	}
 
 	// Hide normal preview if active
-	let previewNormal = wrapper.lastChild;
+	var previewNormal = wrapper.lastChild;
 	if(/editor-preview-active/.test(previewNormal.className)) {
 		previewNormal.className = previewNormal.className.replace(
 			/\s*editor-preview-active\s*/g, ""
 		);
-		let toolbar = editor.toolbarElements.preview,
-		    toolbar_div = wrapper.previousSibling;
+		var toolbar = editor.toolbarElements.preview,
+			toolbar_div = wrapper.previousSibling;
 		toolbar.className = toolbar.className.replace(/\s*active\s*/g, "");
 		toolbar_div.className = toolbar_div.className.replace(/\s*disabled-for-preview*/g, "");
 	}
 
-	let sideBySideRenderingFunction = function() {
+	var sideBySideRenderingFunction = function() {
 		preview.innerHTML = editor.options.previewRender(editor.value(), preview);
 	};
 
@@ -750,11 +750,11 @@ function toggleSideBySide(editor) {
  * Preview action.
  */
 function togglePreview(editor) {
-    let cm = editor.codemirror,
-	    wrapper = cm.getWrapperElement(),
-	    toolbar_div = wrapper.previousSibling,
-	    toolbar = editor.options.toolbar ? editor.toolbarElements.preview : false,
-	    preview = wrapper.lastChild;
+	var cm = editor.codemirror,
+		wrapper = cm.getWrapperElement(),
+		toolbar_div = wrapper.previousSibling,
+		toolbar = editor.options.toolbar ? editor.toolbarElements.preview : false,
+		preview = wrapper.lastChild;
 	if(!preview || !/editor-preview/.test(preview.className)) {
 		preview = document.createElement("div");
 		preview.className = "editor-preview";
@@ -783,7 +783,7 @@ function togglePreview(editor) {
 	preview.innerHTML = editor.options.previewRender(editor.value(), preview);
 
 	// Turn off side by side if needed
-	let sidebyside = cm.getWrapperElement().nextSibling;
+	var sidebyside = cm.getWrapperElement().nextSibling;
 	if(/editor-preview-active-side/.test(sidebyside.className))
 		toggleSideBySide(editor);
 }
@@ -792,11 +792,11 @@ function _replaceSelection(cm, active, startEnd, url) {
 	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
-	let text,
-	    start = startEnd[0],
-	    end = startEnd[1],
-	    startPoint = cm.getCursor("start"),
-	    endPoint = cm.getCursor("end");
+	var text,
+		start = startEnd[0],
+		end = startEnd[1],
+		startPoint = cm.getCursor("start"),
+		endPoint = cm.getCursor("end");
 	if(url) {
 		end = end.replace("#url#", url);
 	}
@@ -826,12 +826,12 @@ function _toggleHeading(cm, direction, size) {
 	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
-	let startPoint = cm.getCursor("start"),
-	    endPoint = cm.getCursor("end");
-	for(let i = startPoint.line; i <= endPoint.line; i++) {
+	var startPoint = cm.getCursor("start"),
+		endPoint = cm.getCursor("end");
+	for(var i = startPoint.line; i <= endPoint.line; i++) {
 		(function(i) {
-			let text = cm.getLine(i),
-			    currHeadingLevel = text.search(/[^#]/);
+			var text = cm.getLine(i),
+				currHeadingLevel = text.search(/[^#]/);
 
 			if(direction !== undefined) {
 				if(currHeadingLevel <= 0) {
@@ -896,22 +896,22 @@ function _toggleLine(cm, name) {
 	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
-	let stat = getState(cm),
-	    startPoint = cm.getCursor("start"),
-	    endPoint = cm.getCursor("end"),
-	    repl = {
-            "quote": /^(\s*)\>\s+/,
-            "unordered-list": /^(\s*)(\*|\-|\+)\s+/,
-            "ordered-list": /^(\s*)\d+\.\s+/
-	    },
-	    map = {
-            "quote": "> ",
-            "unordered-list": "* ",
-            "ordered-list": "1. "
-	    };
-	for(let i = startPoint.line; i <= endPoint.line; i++) {
+	var stat = getState(cm),
+		startPoint = cm.getCursor("start"),
+		endPoint = cm.getCursor("end"),
+		repl = {
+			"quote": /^(\s*)\>\s+/,
+			"unordered-list": /^(\s*)(\*|\-|\+)\s+/,
+			"ordered-list": /^(\s*)\d+\.\s+/
+		},
+		map = {
+			"quote": "> ",
+			"unordered-list": "* ",
+			"ordered-list": "1. "
+		};
+	for(var i = startPoint.line; i <= endPoint.line; i++) {
 		(function(i) {
-			let text = cm.getLine(i);
+			var text = cm.getLine(i);
 			if(stat[name]) {
 				text = text.replace(repl[name], "$1");
 			} else {
@@ -934,15 +934,15 @@ function _toggleBlock(editor, type, start_chars, end_chars) {
 		return;
 
 	end_chars = (typeof end_chars === "undefined") ? start_chars : end_chars;
-	let cm = editor.codemirror,
-	    stat = getState(cm);
+	var cm = editor.codemirror,
+		stat = getState(cm);
 
-	let text,
-	    start = start_chars,
-	    end = end_chars;
+	var text,
+		start = start_chars,
+		end = end_chars;
 
-	let startPoint = cm.getCursor("start"),
-	    endPoint = cm.getCursor("end");
+	var startPoint = cm.getCursor("start"),
+		endPoint = cm.getCursor("end");
 
 	if(stat[type]) {
 		text = cm.getLine(startPoint.line);
@@ -1002,11 +1002,11 @@ function _cleanBlock(cm) {
 	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
-	let startPoint = cm.getCursor("start"),
-	    endPoint = cm.getCursor("end"),
-	    text;
+	var startPoint = cm.getCursor("start"),
+		endPoint = cm.getCursor("end"),
+		text;
 
-	for(let line = startPoint.line; line <= endPoint.line; line++) {
+	for(var line = startPoint.line; line <= endPoint.line; line++) {
 		text = cm.getLine(line);
 		text = text.replace(/^[ ]*([# ]+|\*|\-|[> ]+|[0-9]+(.|\)))[ ]*/, "");
 
@@ -1022,7 +1022,7 @@ function _cleanBlock(cm) {
 
 // Merge the properties of one object into another.
 function _mergeProperties(target, source) {
-	for(let property in source) {
+	for(var property in source) {
 		if(source.hasOwnProperty(property)) {
 			if(source[property] instanceof Array) {
 				target[property] = source[property].concat(target[property] instanceof Array ? target[property] : []);
@@ -1043,7 +1043,7 @@ function _mergeProperties(target, source) {
 
 // Merge an arbitrary number of objects into one.
 function extend(target) {
-	for(let i = 1; i < arguments.length; i++) {
+	for(var i = 1; i < arguments.length; i++) {
 		target = _mergeProperties(target, arguments[i]);
 	}
 
@@ -1052,11 +1052,11 @@ function extend(target) {
 
 /* The right word count in respect for CJK. */
 function wordCount(data) {
-	let pattern = /[a-zA-Z0-9_\u0392-\u03c9\u0410-\u04F9]+|[\u4E00-\u9FFF\u3400-\u4dbf\uf900-\ufaff\u3040-\u309f\uac00-\ud7af]+/g,
-	    m = data.match(pattern),
-	    count = 0;
+	var pattern = /[a-zA-Z0-9_\u0392-\u03c9\u0410-\u04F9]+|[\u4E00-\u9FFF\u3400-\u4dbf\uf900-\ufaff\u3040-\u309f\uac00-\ud7af]+/g,
+		m = data.match(pattern),
+		count = 0;
 	if(m === null) return count;
-	for(let i = 0; i < m.length; i++) {
+	for(var i = 0; i < m.length; i++) {
 		if(m[i].charCodeAt(0) >= 0x4E00) {
 			count += m[i].length;
 		} else {
@@ -1066,7 +1066,7 @@ function wordCount(data) {
 	return count;
 }
 
-let toolbarBuiltInButtons = {
+var toolbarBuiltInButtons = {
 	"bold": {
 		name: "bold",
 		action: toggleBold,
@@ -1240,19 +1240,19 @@ let toolbarBuiltInButtons = {
 	}
 };
 
-let insertTexts = {
+var insertTexts = {
 	link: ["[", "](#url#)"],
 	image: ["![](", "#url#)"],
 	table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text     | Text     |\n\n"],
 	horizontalRule: ["", "\n\n-----\n\n"]
 };
 
-let promptTexts = {
+var promptTexts = {
 	link: "URL for the link:",
 	image: "URL of the image:"
 };
 
-let blockStyles = {
+var blockStyles = {
 	"bold": "**",
 	"code": "```",
 	"italic": "*"
@@ -1271,20 +1271,20 @@ function SimpleMDE(options) {
 
 
 	// Check if Font Awesome needs to be auto downloaded or loaded locally
-    let autoDownloadFA = true,
-        loadFALocally = false;
+	var autoDownloadFA = true,
+		loadFALocally = false;
 
 	if(options.autoDownloadFontAwesome === false) {
 		autoDownloadFA = false;
-    }
+	}
 
-	if(options.loadFontAwesomeLocally === true) {
+	if(options.loadFontAwesomeLocally === true) { // TODO: add option to provide a path to the local FA file
 		loadFALocally = true;
-    }
+	}
 
 	if(options.autoDownloadFontAwesome !== true) {
-		let styleSheets = document.styleSheets;
-		for(let i = 0; i < styleSheets.length; i++) {
+		var styleSheets = document.styleSheets;
+		for(var i = 0; i < styleSheets.length; i++) {
 			if(!styleSheets[i].href)
 				continue;
 
@@ -1292,11 +1292,11 @@ function SimpleMDE(options) {
 				autoDownloadFA = false;
 			}
 		}
-    }
+	}
 
 	if(options.loadFontAwesomeLocally !== true) {
-		let styleSheets = document.styleSheets;
-		for(let i = 0; i < styleSheets.length; i++) {
+		var styleSheets = document.styleSheets;
+		for(var i = 0; i < styleSheets.length; i++) {
 			if(!styleSheets[i].href)
 				continue;
 
@@ -1304,20 +1304,20 @@ function SimpleMDE(options) {
 				loadFALocally = false;
 			}
 		}
-    }
+	}
 
-    // The default configuration loads from the CDN, and overrides the local copy if both options are true
+	// The default configuration loads from the CDN, and overrides the local copy if both options are true
 	if(autoDownloadFA) {
-		let link = document.createElement("link");
+		var link = document.createElement("link");
 		link.rel = "stylesheet";
 		link.href = "https://use.fontawesome.com/releases/v5.0.9/css/all.css";
 		document.getElementsByTagName("head")[0].appendChild(link);
-	} else if (loadFALocally) {
-        let link = document.createElement("link");
+	} else if(loadFALocally) {
+		var link = document.createElement("link");
 		link.rel = "stylesheet";
-		link.href = `${__dirname}/../css/fontawesome-all.min.css`;
+		link.href = __dirname + '/../css/fontawesome-all.min.css';
 		document.getElementsByTagName("head")[0].appendChild(link);
-    }
+	}
 
 	// Find the textarea to use
 	if(options.element) {
