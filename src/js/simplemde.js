@@ -669,7 +669,7 @@ function drawHorizontalRule(editor) {
  * Undo action.
  */
 function undo(editor) {
-	var cm = editor.codemirror;
+	let cm = editor.codemirror;
 	cm.undo();
 	cm.focus();
 }
@@ -679,7 +679,7 @@ function undo(editor) {
  * Redo action.
  */
 function redo(editor) {
-	var cm = editor.codemirror;
+	let cm = editor.codemirror;
 	cm.redo();
 	cm.focus();
 }
@@ -689,11 +689,11 @@ function redo(editor) {
  * Toggle side by side preview
  */
 function toggleSideBySide(editor) {
-	var cm = editor.codemirror;
-	var wrapper = cm.getWrapperElement();
-	var preview = wrapper.nextSibling;
-	var toolbarButton = editor.toolbarElements["side-by-side"];
-	var useSideBySideListener = false;
+	let cm = editor.codemirror,
+	    wrapper = cm.getWrapperElement(),
+	    preview = wrapper.nextSibling,
+	    toolbarButton = editor.toolbarElements["side-by-side"],
+	    useSideBySideListener = false;
 	if(/editor-preview-active-side/.test(preview.className)) {
 		preview.className = preview.className.replace(
 			/\s*editor-preview-active-side\s*/g, ""
@@ -715,18 +715,18 @@ function toggleSideBySide(editor) {
 	}
 
 	// Hide normal preview if active
-	var previewNormal = wrapper.lastChild;
+	let previewNormal = wrapper.lastChild;
 	if(/editor-preview-active/.test(previewNormal.className)) {
 		previewNormal.className = previewNormal.className.replace(
 			/\s*editor-preview-active\s*/g, ""
 		);
-		var toolbar = editor.toolbarElements.preview;
-		var toolbar_div = wrapper.previousSibling;
+		let toolbar = editor.toolbarElements.preview,
+		    toolbar_div = wrapper.previousSibling;
 		toolbar.className = toolbar.className.replace(/\s*active\s*/g, "");
 		toolbar_div.className = toolbar_div.className.replace(/\s*disabled-for-preview*/g, "");
 	}
 
-	var sideBySideRenderingFunction = function() {
+	let sideBySideRenderingFunction = function() {
 		preview.innerHTML = editor.options.previewRender(editor.value(), preview);
 	};
 
@@ -750,11 +750,11 @@ function toggleSideBySide(editor) {
  * Preview action.
  */
 function togglePreview(editor) {
-	var cm = editor.codemirror;
-	var wrapper = cm.getWrapperElement();
-	var toolbar_div = wrapper.previousSibling;
-	var toolbar = editor.options.toolbar ? editor.toolbarElements.preview : false;
-	var preview = wrapper.lastChild;
+    let cm = editor.codemirror,
+	    wrapper = cm.getWrapperElement(),
+	    toolbar_div = wrapper.previousSibling,
+	    toolbar = editor.options.toolbar ? editor.toolbarElements.preview : false,
+	    preview = wrapper.lastChild;
 	if(!preview || !/editor-preview/.test(preview.className)) {
 		preview = document.createElement("div");
 		preview.className = "editor-preview";
@@ -783,7 +783,7 @@ function togglePreview(editor) {
 	preview.innerHTML = editor.options.previewRender(editor.value(), preview);
 
 	// Turn off side by side if needed
-	var sidebyside = cm.getWrapperElement().nextSibling;
+	let sidebyside = cm.getWrapperElement().nextSibling;
 	if(/editor-preview-active-side/.test(sidebyside.className))
 		toggleSideBySide(editor);
 }
@@ -792,11 +792,11 @@ function _replaceSelection(cm, active, startEnd, url) {
 	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
-	var text;
-	var start = startEnd[0];
-	var end = startEnd[1];
-	var startPoint = cm.getCursor("start");
-	var endPoint = cm.getCursor("end");
+	let text,
+	    start = startEnd[0],
+	    end = startEnd[1],
+	    startPoint = cm.getCursor("start"),
+	    endPoint = cm.getCursor("end");
 	if(url) {
 		end = end.replace("#url#", url);
 	}
@@ -826,12 +826,12 @@ function _toggleHeading(cm, direction, size) {
 	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
-	var startPoint = cm.getCursor("start");
-	var endPoint = cm.getCursor("end");
-	for(var i = startPoint.line; i <= endPoint.line; i++) {
+	let startPoint = cm.getCursor("start"),
+	    endPoint = cm.getCursor("end");
+	for(let i = startPoint.line; i <= endPoint.line; i++) {
 		(function(i) {
-			var text = cm.getLine(i);
-			var currHeadingLevel = text.search(/[^#]/);
+			let text = cm.getLine(i),
+			    currHeadingLevel = text.search(/[^#]/);
 
 			if(direction !== undefined) {
 				if(currHeadingLevel <= 0) {
@@ -896,22 +896,22 @@ function _toggleLine(cm, name) {
 	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
-	var stat = getState(cm);
-	var startPoint = cm.getCursor("start");
-	var endPoint = cm.getCursor("end");
-	var repl = {
-		"quote": /^(\s*)\>\s+/,
-		"unordered-list": /^(\s*)(\*|\-|\+)\s+/,
-		"ordered-list": /^(\s*)\d+\.\s+/
-	};
-	var map = {
-		"quote": "> ",
-		"unordered-list": "* ",
-		"ordered-list": "1. "
-	};
-	for(var i = startPoint.line; i <= endPoint.line; i++) {
+	let stat = getState(cm),
+	    startPoint = cm.getCursor("start"),
+	    endPoint = cm.getCursor("end"),
+	    repl = {
+            "quote": /^(\s*)\>\s+/,
+            "unordered-list": /^(\s*)(\*|\-|\+)\s+/,
+            "ordered-list": /^(\s*)\d+\.\s+/
+	    },
+	    map = {
+            "quote": "> ",
+            "unordered-list": "* ",
+            "ordered-list": "1. "
+	    };
+	for(let i = startPoint.line; i <= endPoint.line; i++) {
 		(function(i) {
-			var text = cm.getLine(i);
+			let text = cm.getLine(i);
 			if(stat[name]) {
 				text = text.replace(repl[name], "$1");
 			} else {
@@ -934,15 +934,15 @@ function _toggleBlock(editor, type, start_chars, end_chars) {
 		return;
 
 	end_chars = (typeof end_chars === "undefined") ? start_chars : end_chars;
-	var cm = editor.codemirror;
-	var stat = getState(cm);
+	let cm = editor.codemirror,
+	    stat = getState(cm);
 
-	var text;
-	var start = start_chars;
-	var end = end_chars;
+	let text,
+	    start = start_chars,
+	    end = end_chars;
 
-	var startPoint = cm.getCursor("start");
-	var endPoint = cm.getCursor("end");
+	let startPoint = cm.getCursor("start"),
+	    endPoint = cm.getCursor("end");
 
 	if(stat[type]) {
 		text = cm.getLine(startPoint.line);
@@ -1002,11 +1002,11 @@ function _cleanBlock(cm) {
 	if(/editor-preview-active/.test(cm.getWrapperElement().lastChild.className))
 		return;
 
-	var startPoint = cm.getCursor("start");
-	var endPoint = cm.getCursor("end");
-	var text;
+	let startPoint = cm.getCursor("start"),
+	    endPoint = cm.getCursor("end"),
+	    text;
 
-	for(var line = startPoint.line; line <= endPoint.line; line++) {
+	for(let line = startPoint.line; line <= endPoint.line; line++) {
 		text = cm.getLine(line);
 		text = text.replace(/^[ ]*([# ]+|\*|\-|[> ]+|[0-9]+(.|\)))[ ]*/, "");
 
@@ -1022,7 +1022,7 @@ function _cleanBlock(cm) {
 
 // Merge the properties of one object into another.
 function _mergeProperties(target, source) {
-	for(var property in source) {
+	for(let property in source) {
 		if(source.hasOwnProperty(property)) {
 			if(source[property] instanceof Array) {
 				target[property] = source[property].concat(target[property] instanceof Array ? target[property] : []);
@@ -1043,7 +1043,7 @@ function _mergeProperties(target, source) {
 
 // Merge an arbitrary number of objects into one.
 function extend(target) {
-	for(var i = 1; i < arguments.length; i++) {
+	for(let i = 1; i < arguments.length; i++) {
 		target = _mergeProperties(target, arguments[i]);
 	}
 
@@ -1052,11 +1052,11 @@ function extend(target) {
 
 /* The right word count in respect for CJK. */
 function wordCount(data) {
-	var pattern = /[a-zA-Z0-9_\u0392-\u03c9\u0410-\u04F9]+|[\u4E00-\u9FFF\u3400-\u4dbf\uf900-\ufaff\u3040-\u309f\uac00-\ud7af]+/g;
-	var m = data.match(pattern);
-	var count = 0;
+	let pattern = /[a-zA-Z0-9_\u0392-\u03c9\u0410-\u04F9]+|[\u4E00-\u9FFF\u3400-\u4dbf\uf900-\ufaff\u3040-\u309f\uac00-\ud7af]+/g,
+	    m = data.match(pattern),
+	    count = 0;
 	if(m === null) return count;
-	for(var i = 0; i < m.length; i++) {
+	for(let i = 0; i < m.length; i++) {
 		if(m[i].charCodeAt(0) >= 0x4E00) {
 			count += m[i].length;
 		} else {
@@ -1066,7 +1066,7 @@ function wordCount(data) {
 	return count;
 }
 
-var toolbarBuiltInButtons = {
+let toolbarBuiltInButtons = {
 	"bold": {
 		name: "bold",
 		action: toggleBold,
@@ -1090,38 +1090,38 @@ var toolbarBuiltInButtons = {
 	"heading": {
 		name: "heading",
 		action: toggleHeadingSmaller,
-		className: "fa fa-header",
+		className: "fa fa-heading",
 		title: "Heading",
 		default: true
 	},
 	"heading-smaller": {
 		name: "heading-smaller",
 		action: toggleHeadingSmaller,
-		className: "fa fa-header fa-header-x fa-header-smaller",
+		className: "fa fa-heading fa-heading-x fa-heading-smaller",
 		title: "Smaller Heading"
 	},
 	"heading-bigger": {
 		name: "heading-bigger",
 		action: toggleHeadingBigger,
-		className: "fa fa-header fa-header-x fa-header-bigger",
+		className: "fa fa-heading fa-heading-x fa-heading-bigger",
 		title: "Bigger Heading"
 	},
 	"heading-1": {
 		name: "heading-1",
 		action: toggleHeading1,
-		className: "fa fa-header fa-header-x fa-header-1",
+		className: "fa fa-heading fa-heading-x fa-heading-1",
 		title: "Big Heading"
 	},
 	"heading-2": {
 		name: "heading-2",
 		action: toggleHeading2,
-		className: "fa fa-header fa-header-x fa-header-2",
+		className: "fa fa-heading fa-heading-x fa-heading-2",
 		title: "Medium Heading"
 	},
 	"heading-3": {
 		name: "heading-3",
 		action: toggleHeading3,
-		className: "fa fa-header fa-header-x fa-header-3",
+		className: "fa fa-heading fa-heading-x fa-heading-3",
 		title: "Small Heading"
 	},
 	"separator-1": {
@@ -1173,7 +1173,7 @@ var toolbarBuiltInButtons = {
 	"image": {
 		name: "image",
 		action: drawImage,
-		className: "fa fa-picture-o",
+		className: "fa fa-image",
 		title: "Insert Image",
 		default: true
 	},
@@ -1240,19 +1240,19 @@ var toolbarBuiltInButtons = {
 	}
 };
 
-var insertTexts = {
+let insertTexts = {
 	link: ["[", "](#url#)"],
 	image: ["![](", "#url#)"],
 	table: ["", "\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text     | Text     |\n\n"],
 	horizontalRule: ["", "\n\n-----\n\n"]
 };
 
-var promptTexts = {
+let promptTexts = {
 	link: "URL for the link:",
 	image: "URL of the image:"
 };
 
-var blockStyles = {
+let blockStyles = {
 	"bold": "**",
 	"code": "```",
 	"italic": "*"
@@ -1266,36 +1266,58 @@ function SimpleMDE(options) {
 	options = options || {};
 
 
-	// Used later to refer to it"s parent
+	// Used later to refer to its parent
 	options.parent = this;
 
 
-	// Check if Font Awesome needs to be auto downloaded
-	var autoDownloadFA = true;
+	// Check if Font Awesome needs to be auto downloaded or loaded locally
+    let autoDownloadFA = true,
+        loadFALocally = false;
 
 	if(options.autoDownloadFontAwesome === false) {
 		autoDownloadFA = false;
-	}
+    }
+
+	if(options.loadFontAwesomeLocally === true) {
+		loadFALocally = true;
+    }
 
 	if(options.autoDownloadFontAwesome !== true) {
-		var styleSheets = document.styleSheets;
-		for(var i = 0; i < styleSheets.length; i++) {
+		let styleSheets = document.styleSheets;
+		for(let i = 0; i < styleSheets.length; i++) {
 			if(!styleSheets[i].href)
 				continue;
 
-			if(styleSheets[i].href.indexOf("//maxcdn.bootstrapcdn.com/font-awesome/") > -1) {
+			if(styleSheets[i].href.indexOf("//use.fontawesome.com/") > -1) {
 				autoDownloadFA = false;
 			}
 		}
-	}
+    }
 
+	if(options.loadFontAwesomeLocally !== true) {
+		let styleSheets = document.styleSheets;
+		for(let i = 0; i < styleSheets.length; i++) {
+			if(!styleSheets[i].href)
+				continue;
+
+			if(styleSheets[i].href.indexOf("fontawesome-all.min.css") > -1) {
+				loadFALocally = false;
+			}
+		}
+    }
+
+    // The default configuration loads from the CDN, and overrides the local copy if both options are true
 	if(autoDownloadFA) {
-		var link = document.createElement("link");
+		let link = document.createElement("link");
 		link.rel = "stylesheet";
-		link.href = "https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css";
+		link.href = "https://use.fontawesome.com/releases/v5.0.9/css/all.css";
 		document.getElementsByTagName("head")[0].appendChild(link);
-	}
-
+	} else if (loadFALocally) {
+        let link = document.createElement("link");
+		link.rel = "stylesheet";
+		link.href = `${__dirname}/../css/fontawesome-all.min.css`;
+		document.getElementsByTagName("head")[0].appendChild(link);
+    }
 
 	// Find the textarea to use
 	if(options.element) {
